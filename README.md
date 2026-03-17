@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PropostaAI 🚀 — Propostas Comerciais de Elite
 
-## Getting Started
+**PropostaAI** é uma plataforma SaaS avançada projetada para transformar a maneira como profissionais e empresas criam propostas comerciais. Utilizando inteligência artificial de última geração, o sistema automatiza a criação de documentos persuasivos, estruturados e estrategicamente precificados.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Funcionalidades Principais
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **🧠 Escopo Inteligente**: Informe os detalhes do serviço e deixe que a IA analise as variáveis críticas do projeto.
+- **💰 Precificação Estratégica**: Sugestões automáticas de ticket ideal baseadas em complexidade, mercado e valor percebido.
+- **📄 Geração de Alta Fidelidade**: Documentos profissionais completos gerados em minutos, prontos para impressionar clientes.
+- **📊 Dashboard de Gestão**: Controle total sobre suas propostas, rascunhos e histórico de conversões.
+- **🎨 Design Premium**: Interface moderna com estética dark mode, glassmorphism e micro-animações.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Stack Tecnológica
 
-## Learn More
+O projeto utiliza o que há de mais moderno no ecossistema web:
 
-To learn more about Next.js, take a look at the following resources:
+- **Frontend**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Estilização**: [Tailwind CSS v4](https://tailwindcss.com/) com [shadcn/ui](https://ui.shadcn.com/)
+- **Backend & Auth**: [Supabase](https://supabase.com/) (PostgreSQL + Auth + Storage)
+- **Inteligência Artificial**: [OpenAI API](https://openai.com/) / [Claude SDK](https://www.anthropic.com/api)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Linguagem**: [TypeScript](https://www.typescriptlang.org/)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 Como Começar
 
-## Deploy on Vercel
+### Pré-requisitos
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Node.js 20+
+- Conta no Supabase (para Banco de Dados e Auth)
+- Chave de API da OpenAI ou Anthropic
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Instalação
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/vrorato/proposta-ai.git
+   cd proposta-ai
+   ```
+
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+
+3. Configure as variáveis de ambiente:
+   Crie um arquivo `.env` na raiz do projeto (use o `.env.example` como base):
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=seu_url_do_supabase
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_chave_anonima
+   OPENAI_API_KEY=sua_chave_da_openai
+   ```
+
+4. Execute o servidor de desenvolvimento:
+   ```bash
+   npm run dev
+   ```
+
+5. Abra [http://localhost:3000](http://localhost:3000) no seu navegador.
+
+---
+
+## 📅 Roadmap de Desenvolvimento
+
+### Fase 1 — MVP (Concluído ✅)
+- Landing page responsiva de alto impacto.
+- Sistema de autenticação via Supabase.
+- Dashboard estruturado com KPIs e gestão de propostas.
+- Proteção de rotas e middleware de segurança.
+
+### Fase 2 — Engine de IA (Em progresso 🏗️)
+- Wizard multi-step para criação de propostas.
+- Integração profunda com modelos de linguagem (LLM).
+- Preview dinâmico de sugestões da IA.
+
+### Fase 3 — Experiência Final
+- Exportação nativa para PDF com branding personalizado.
+- Biblioteca de templates por nicho (Design, Dev, Marketing, etc).
+- Configurações avançadas de perfil e empresa.
+
+---
+
+## 📄 Licença
+
+Este projeto é privado e de uso exclusivo de seu proprietário.
+
+---
+
+Desenvolvido por [Vinícius Rorato](https://github.com/vrorato) ⚡
