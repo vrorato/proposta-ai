@@ -9,9 +9,11 @@ export const metadata = {
 export default async function HistoryPage() {
     const { data, error } = await getProposals()
 
-    // Pass data downward to client component so it can handle real-time states (search, duplication, deletion)
     return (
-        <div className="py-6">
+        <div className="space-y-10 animate-in fade-in duration-700">
+            {/* Page Header */}
+
+
             <HistoryDashboard initialProposals={data || []} />
         </div>
     )

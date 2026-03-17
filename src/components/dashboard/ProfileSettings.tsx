@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useTransition, useRef } from 'react'
-import { Building2, Palette, FileText, Briefcase, Camera, Check, Loader2, UploadCloud } from 'lucide-react'
+import { Building2, Palette, FileText, Briefcase, Camera, Check, Loader2, UploadCloud, ChevronRight, Sparkles } from 'lucide-react'
 import { updateProfile } from '@/app/dashboard/configuracoes/actions'
 
-type ProfileData = any // We'll type this broadly for now
+type ProfileData = any 
 
 export function ProfileSettings({ profile }: { profile: ProfileData }) {
     const [activeTab, setActiveTab] = useState('company')
@@ -13,7 +13,6 @@ export function ProfileSettings({ profile }: { profile: ProfileData }) {
     const [errorMessage, setErrorMessage] = useState('')
     const formRef = useRef<HTMLFormElement>(null)
 
-    // Image previews
     const [logoPreview, setLogoPreview] = useState(profile?.company_logo_url || '')
     const [signaturePreview, setSignaturePreview] = useState(profile?.digital_signature_url || '')
 
@@ -25,7 +24,6 @@ export function ProfileSettings({ profile }: { profile: ProfileData }) {
         }
     }
 
-    // Masks
     const maskCnpjCpf = (value: string) => {
         const nums = value.replace(/\D/g, '')
         if (nums.length <= 11) {
@@ -42,7 +40,6 @@ export function ProfileSettings({ profile }: { profile: ProfileData }) {
         return nums.replace(/(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d)/, '$1-$2')
     }
 
-    // Color picker state sync
     const [primaryColor, setPrimaryColor] = useState(profile?.brand_primary_color || '#0F1B2D')
     const [secondaryColor, setSecondaryColor] = useState(profile?.brand_secondary_color || '#C9A84C')
 
@@ -55,12 +52,10 @@ export function ProfileSettings({ profile }: { profile: ProfileData }) {
                     setSaveStatus('success')
                     setTimeout(() => setSaveStatus('idle'), 3000)
                 } else {
-                    console.error('Erro:', result.error)
                     setErrorMessage(result.error || 'Erro desconhecido')
                     setSaveStatus('error')
                 }
             } catch (error: any) {
-                console.error(error)
                 setErrorMessage(error.message || 'Erro inesperado')
                 setSaveStatus('error')
             }
@@ -68,214 +63,228 @@ export function ProfileSettings({ profile }: { profile: ProfileData }) {
     }
 
     const tabs = [
-        { id: 'company', label: 'Dados da Empresa', icon: Building2 },
-        { id: 'branding', label: 'Identidade Visual', icon: Palette },
-        { id: 'defaults', label: 'Padrões das Propostas', icon: FileText },
-        { id: 'professional', label: 'Info. Profissionais', icon: Briefcase },
+        { id: 'company', label: 'Empresa', icon: Building2 },
+        { id: 'branding', label: 'Branding', icon: Palette },
+        { id: 'defaults', label: 'Padrões', icon: FileText },
+        { id: 'professional', label: 'Bio IA', icon: Briefcase },
     ]
 
     return (
-        <div className="flex flex-col h-full bg-white rounded-xl shadow-sm border border-[#E2E8F0] overflow-hidden">
+        <div className="flex flex-col h-full bg-white/[0.02] rounded-[40px] border border-white/[0.03] overflow-hidden relative group/outer duration-700">
             {/* Header / Tabs */}
-            <div className="flex overflow-x-auto border-b border-[#E2E8F0]">
+            <div className="flex overflow-x-auto border-b border-white/[0.03] px-10 bg-black/20 backdrop-blur-md sticky top-0 z-20">
                 {tabs.map((tab) => (
                     <button
                         key={tab.id}
+                        type="button"
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex items-center gap-2 px-6 py-4 text-sm font-medium transition-colors whitespace-nowrap
+                        className={`flex items-center gap-4 px-8 py-8 text-[11px] font-black uppercase tracking-[0.2em] transition-all whitespace-nowrap relative group
                             ${activeTab === tab.id
-                                ? 'border-b-2 border-[#1A2E4A] text-[#1A2E4A]'
-                                : 'text-[#8896A6] hover:text-[#1A2E4A] hover:bg-gray-50'}`}
+                                ? 'text-brand-primary'
+                                : 'text-gray-600 hover:text-gray-400'}`}
                     >
-                        <tab.icon className="h-4 w-4" />
+                        <tab.icon className={`h-4 w-4 transition-all duration-500 ${activeTab === tab.id ? 'stroke-[2.5px] scale-110 drop-shadow-[0_0_8px_rgba(13,242,89,0.5)]' : 'stroke-[1.5px]'}`} />
                         {tab.label}
+                        {activeTab === tab.id && (
+                            <>
+                                <div className="absolute bottom-0 left-4 right-4 h-1 bg-brand-primary rounded-full shadow-[0_0_20px_rgba(13,242,89,0.8)]" />
+                                <div className="absolute inset-0 bg-brand-primary/5 blur-xl pointer-events-none" />
+                            </>
+                        )}
                     </button>
                 ))}
             </div>
 
             {/* Form Content */}
-            <form ref={formRef} action={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
-                <div className="flex-1 overflow-y-auto p-8">
-                    <div className="max-w-3xl mx-auto">
+            <form ref={formRef} action={handleSubmit} className="flex-1 flex flex-col min-h-[600px]">
+                <div className="flex-1 p-12 lg:p-16">
+                    <div className="max-w-4xl">
 
                         {/* TAB 1: EMPRESA */}
-                        <div className={activeTab === 'company' ? 'block' : 'hidden'}>
-                            <div className="mb-6">
-                                <h3 className="text-lg font-semibold text-[#0F1B2D]">Dados Básicos</h3>
-                                <p className="text-sm text-[#8896A6]">Informações que identificam sua empresa nas propostas.</p>
+                        <div className={`${activeTab === 'company' ? 'block animate-in fade-in slide-in-from-bottom-4 duration-700' : 'hidden'}`}>
+                            <div className="mb-12">
+                                <span className="text-[10px] font-black text-brand-primary uppercase tracking-[0.3em] block mb-2">Corporate Identity</span>
+                                <h3 className="text-4xl font-black text-white tracking-tighter">Identidade Corporativa</h3>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Nome Fantasia / Seu Nome</label>
-                                    <input name="full_name" autoComplete="organization" defaultValue={profile?.full_name} className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Nome de Exibição</label>
+                                    <input name="full_name" defaultValue={profile?.full_name} className="w-full bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl text-white placeholder:text-gray-800 outline-none focus:border-brand-primary/30 focus:bg-white/[0.04] transition-all font-bold text-sm h-16" />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Razão Social / Nome de Registro</label>
-                                    <input name="company_name" autoComplete="name" defaultValue={profile?.company_name} className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all" />
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Razão Social</label>
+                                    <input name="company_name" defaultValue={profile?.company_name} className="w-full bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl text-white placeholder:text-gray-800 outline-none focus:border-brand-primary/30 focus:bg-white/[0.04] transition-all font-bold text-sm h-16" />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">CNPJ / CPF</label>
-                                    <input name="company_document" autoComplete="off" defaultValue={profile?.company_document} placeholder="00.000.000/0001-00" maxLength={18} onChange={(e) => { e.target.value = maskCnpjCpf(e.target.value) }} className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all" />
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Documento (CNPJ/CPF)</label>
+                                    <input name="company_document" defaultValue={profile?.company_document} placeholder="00.000.000/0001-00" maxLength={18} onChange={(e) => { e.target.value = maskCnpjCpf(e.target.value) }} className="w-full bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl text-white placeholder:text-gray-800 outline-none focus:border-brand-primary/30 focus:bg-white/[0.04] transition-all font-bold text-sm h-16" />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Telefone Comercial</label>
-                                    <input name="phone" autoComplete="tel" defaultValue={profile?.phone} placeholder="(00) 00000-0000" maxLength={15} onChange={(e) => { e.target.value = maskPhone(e.target.value) }} className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all" />
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Contato Geral</label>
+                                    <input name="phone" defaultValue={profile?.phone} placeholder="(00) 00000-0000" maxLength={15} onChange={(e) => { e.target.value = maskPhone(e.target.value) }} className="w-full bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl text-white placeholder:text-gray-800 outline-none focus:border-brand-primary/30 focus:bg-white/[0.04] transition-all font-bold text-sm h-16" />
                                 </div>
-                                <div className="space-y-2 md:col-span-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Endereço Completo</label>
-                                    <input name="company_address" autoComplete="street-address" defaultValue={profile?.company_address} placeholder="Rua, Número, Bairro, Cidade - Estado" className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all" />
+                                <div className="space-y-3 md:col-span-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Localização Principal</label>
+                                    <input name="company_address" defaultValue={profile?.company_address} placeholder="Rua, Número, Bairro, Cidade - Estado" className="w-full bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl text-white placeholder:text-gray-800 outline-none focus:border-brand-primary/30 focus:bg-white/[0.04] transition-all font-bold text-sm h-16" />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Website</label>
-                                    <input name="website" autoComplete="url" defaultValue={profile?.website} placeholder="https://seusite.com.br" className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all" />
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Domínio Digital</label>
+                                    <input name="website" defaultValue={profile?.website} placeholder="https://seusite.com.br" className="w-full bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl text-white placeholder:text-gray-800 outline-none focus:border-brand-primary/30 focus:bg-white/[0.04] transition-all font-bold text-sm h-16" />
                                 </div>
                             </div>
                         </div>
 
-                        {/* TAB 2: IDENTIDADE VISUAL */}
-                        <div className={activeTab === 'branding' ? 'block' : 'hidden'}>
-                            <div className="mb-6">
-                                <h3 className="text-lg font-semibold text-[#0F1B2D]">Identidade Visual</h3>
-                                <p className="text-sm text-[#8896A6]">Personalize as cores e o logo para deixar as propostas com a sua cara.</p>
+                        {/* TAB 2: BRANDING */}
+                        <div className={`${activeTab === 'branding' ? 'block animate-in fade-in slide-in-from-bottom-4 duration-700' : 'hidden'}`}>
+                            <div className="mb-12">
+                                <span className="text-[10px] font-black text-brand-primary uppercase tracking-[0.3em] block mb-2">Visual Atmosphere</span>
+                                <h3 className="text-4xl font-black text-white tracking-tighter">Atmosfera Visual</h3>
                             </div>
 
-                            <div className="space-y-8">
-                                <div className="space-y-3">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Logotipo da Empresa</label>
-                                    <div className="flex items-center gap-6">
-                                        <div className="h-24 w-24 rounded-lg border-2 border-dashed border-[#E2E8F0] bg-gray-50 flex items-center justify-center overflow-hidden relative">
+                            <div className="space-y-16">
+                                <div className="space-y-6">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Logo Flagship</label>
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-10 bg-white/[0.01] p-10 rounded-[32px] border border-white/[0.03]">
+                                        <div className="h-40 w-40 rounded-3xl border border-white/[0.05] bg-black/40 flex items-center justify-center overflow-hidden relative group cursor-pointer shadow-2xl">
                                             {logoPreview ? (
-                                                <img src={logoPreview} alt="Logo" className="w-full h-full object-contain p-2" />
+                                                <img src={logoPreview} alt="Logo" className="w-full h-full object-contain p-6 transition-transform duration-700 group-hover:scale-110" />
                                             ) : (
-                                                <Camera className="h-6 w-6 text-[#8896A6]" />
+                                                <Camera className="h-8 w-8 text-gray-800" />
                                             )}
+                                            <div className="absolute inset-0 bg-brand-primary/10 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                                <Sparkles className="w-6 h-6 text-brand-primary shadow-glow" />
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#E2E8F0] rounded-lg text-sm font-medium text-[#1A2E4A] hover:bg-gray-50 transition-colors">
-                                                <UploadCloud className="h-4 w-4" />
-                                                Selecionar arquivo
+                                        <div className="space-y-5 flex-1">
+                                            <div className="space-y-1">
+                                                <h4 className="text-white font-black uppercase text-xs tracking-widest">Main Emblem</h4>
+                                                <p className="text-[10px] text-gray-600 font-bold uppercase tracking-[0.15em]">Sugerido: SVG ou PNG (Max 5MB)</p>
+                                            </div>
+                                            <label className="cursor-pointer inline-flex items-center gap-3 px-8 py-4 bg-white/[0.03] border border-white/[0.05] text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white/[0.08] hover:border-brand-primary/20 transition-all active:scale-95 group">
+                                                <UploadCloud className="h-4 w-4 text-brand-primary" />
+                                                Replace Asset
                                                 <input type="file" name="company_logo" accept="image/*" className="hidden" onChange={(e) => handleImageChange(e, setLogoPreview)} />
                                             </label>
-                                            <p className="text-xs text-[#8896A6] mt-2">Recomendado: PNG fundo transparente, max 2MB.</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium text-[#1A2E4A]">Cor Principal</label>
-                                        <div className="flex gap-3">
-                                            <input type="color" name="brand_primary_color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} className="h-12 w-12 rounded cursor-pointer border-0 p-0" />
-                                            <input type="text" value={primaryColor} readOnly className="flex-1 p-3 rounded-lg border border-[#E2E8F0] uppercase font-mono text-sm" />
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                    <div className="space-y-4">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Primary Signature (Hex)</label>
+                                        <div className="flex gap-4">
+                                            <div className="relative h-16 w-16 rounded-2xl overflow-hidden border border-white/[0.1] shadow-2xl">
+                                                <input type="color" name="brand_primary_color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} className="absolute inset-[-10px] w-20 h-20 cursor-pointer border-0 p-0" />
+                                            </div>
+                                            <input type="text" value={primaryColor} readOnly className="flex-1 bg-white/[0.02] border border-white/[0.05] rounded-2xl p-5 text-white font-mono text-xs uppercase h-16 outline-none focus:border-brand-primary/30" />
                                         </div>
-                                        <p className="text-xs text-[#8896A6]">Usada em títulos e backgrounds.</p>
                                     </div>
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium text-[#1A2E4A]">Cor Secundária (Destaque)</label>
-                                        <div className="flex gap-3">
-                                            <input type="color" name="brand_secondary_color" value={secondaryColor} onChange={(e) => setSecondaryColor(e.target.value)} className="h-12 w-12 rounded cursor-pointer border-0 p-0" />
-                                            <input type="text" value={secondaryColor} readOnly className="flex-1 p-3 rounded-lg border border-[#E2E8F0] uppercase font-mono text-sm" />
+                                    <div className="space-y-4">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Secondary Accent (Hex)</label>
+                                        <div className="flex gap-4">
+                                            <div className="relative h-16 w-16 rounded-2xl overflow-hidden border border-white/[0.1] shadow-2xl">
+                                                <input type="color" name="brand_secondary_color" value={secondaryColor} onChange={(e) => setSecondaryColor(e.target.value)} className="absolute inset-[-10px] w-20 h-20 cursor-pointer border-0 p-0" />
+                                            </div>
+                                            <input type="text" value={secondaryColor} readOnly className="flex-1 bg-white/[0.02] border border-white/[0.05] rounded-2xl p-5 text-white font-mono text-xs uppercase h-16 outline-none focus:border-brand-primary/30" />
                                         </div>
-                                        <p className="text-xs text-[#8896A6]">Usada em links, botões e detalhes.</p>
                                     </div>
                                 </div>
 
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Fonte Preferida</label>
-                                    <select name="brand_font" defaultValue={profile?.brand_font || 'sans'} className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all">
-                                        <option value="sans">Sem Serifa (Moderno - Inter/Roboto)</option>
-                                        <option value="serif">Com Serifa (Clássico - Merriweather/Playfair)</option>
-                                        <option value="mono">Monoespaçada (Tech - JetBrains/Fira)</option>
-                                    </select>
+                                <div className="space-y-4">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Engine Typography</label>
+                                    <div className="relative group">
+                                        <select name="brand_font" defaultValue={profile?.brand_font || 'sans'} className="w-full bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl text-white focus:border-brand-primary/30 transition-all font-black text-[11px] uppercase tracking-widest h-16 outline-none appearance-none">
+                                            <option value="sans" className="bg-[#0f0f12]">Sans-Serif: Modern & Aggressive</option>
+                                            <option value="serif" className="bg-[#0f0f12]">Classic-Serif: Traditional & Authority</option>
+                                            <option value="mono" className="bg-[#0f0f12]">Monospaced: technical & Minimalist</option>
+                                        </select>
+                                        <ChevronRight className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-700 rotate-90 w-4 h-4 pointer-events-none" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* TAB 3: PADRÕES */}
-                        <div className={activeTab === 'defaults' ? 'block' : 'hidden'}>
-                            <div className="mb-6">
-                                <h3 className="text-lg font-semibold text-[#0F1B2D]">Padrões das Propostas</h3>
-                                <p className="text-sm text-[#8896A6]">Configurações que serão aplicadas automaticamente em novas propostas.</p>
+                        {/* TAB 3: DEFAULTS */}
+                        <div className={`${activeTab === 'defaults' ? 'block animate-in fade-in slide-in-from-bottom-4 duration-700' : 'hidden'}`}>
+                            <div className="mb-12">
+                                <span className="text-[10px] font-black text-brand-primary uppercase tracking-[0.3em] block mb-2">System Defaults</span>
+                                <h3 className="text-4xl font-black text-white tracking-tighter">Protocolos Padrão</h3>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Tom de Voz Padrão</label>
-                                    <select name="default_tone" defaultValue={profile?.default_tone || 'profissional'} className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all">
-                                        <option value="profissional">Profissional & Direto</option>
-                                        <option value="amigavel">Amigável & Empático</option>
-                                        <option value="tecnico">Técnico & Analítico</option>
-                                        <option value="criativo">Criativo & Descontraído</option>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">IA Tone Architecture</label>
+                                    <select name="default_tone" defaultValue={profile?.default_tone || 'profissional'} className="w-full bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl text-white focus:border-brand-primary/30 transition-all font-bold text-sm h-16 outline-none appearance-none">
+                                        <option value="profissional" className="bg-[#0f0f12]">High-Performance Professional</option>
+                                        <option value="amigavel" className="bg-[#0f0f12]">Empathic & Advisory</option>
+                                        <option value="tecnico" className="bg-[#0f0f12]">Analytical & Specialized</option>
+                                        <option value="criativo" className="bg-[#0f0f12]">Revolutionary & Bold</option>
                                     </select>
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Moeda Padrão</label>
-                                    <select name="default_currency" defaultValue={profile?.default_currency || 'BRL'} className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all">
-                                        <option value="BRL">BRL (R$) - Real Brasileiro</option>
-                                        <option value="USD">USD ($) - Dólar Americano</option>
-                                        <option value="EUR">EUR (€) - Euro</option>
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Global Currency</label>
+                                    <select name="default_currency" defaultValue={profile?.default_currency || 'BRL'} className="w-full bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl text-white focus:border-brand-primary/30 h-16 outline-none appearance-none font-bold">
+                                        <option value="BRL" className="bg-[#0f0f12]">BRL - Real Brasileiro</option>
+                                        <option value="USD" className="bg-[#0f0f12]">USD - American Dollar</option>
+                                        <option value="EUR" className="bg-[#0f0f12]">EUR - European Euro</option>
                                     </select>
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Validade Base (Dias)</label>
-                                    <input type="number" name="default_expiration_days" defaultValue={profile?.default_expiration_days || 15} placeholder="15" className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all" />
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Validade Padrão (Dias)</label>
+                                    <input type="number" name="default_expiration_days" defaultValue={profile?.default_expiration_days || 15} className="w-full bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl text-white focus:border-brand-primary/30 h-16 outline-none font-bold" />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Condições de Pagamento Padrão</label>
-                                    <input type="text" name="default_payment_terms" defaultValue={profile?.default_payment_terms} placeholder="Ex: 50% entrada, 50% entrega" className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all" />
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Condições de Checkout</label>
+                                    <input type="text" name="default_payment_terms" defaultValue={profile?.default_payment_terms} placeholder="Ex: 50% entrada, 50% entrega" className="w-full bg-white/[0.02] border border-white/[0.05] p-5 rounded-2xl text-white focus:border-brand-primary/30 h-16 outline-none font-bold" />
                                 </div>
-                                <div className="space-y-2 md:col-span-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Termos e Condições Padrão</label>
-                                    <textarea name="default_terms_conditions" defaultValue={profile?.default_terms_conditions} rows={5} placeholder="Insira os termos legais, direitos autorais, multas por atraso que devem ir no final de todas as propostas..." className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all resize-y"></textarea>
+                                <div className="space-y-3 md:col-span-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Cláusulas Universais</label>
+                                    <textarea name="default_terms_conditions" defaultValue={profile?.default_terms_conditions} rows={6} className="w-full bg-white/[0.02] border border-white/[0.05] p-6 rounded-[32px] text-white focus:border-brand-primary/30 outline-none resize-none font-medium leading-relaxed custom-scrollbar" placeholder="Insira os termos que devem aparecer no final de todas as propostas..."></textarea>
                                 </div>
 
-                                <div className="space-y-3 md:col-span-2 mt-4 pt-6 border-t border-[#E2E8F0]">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Assinatura Digital</label>
-                                    <div className="flex items-center gap-6">
-                                        <div className="h-20 w-48 rounded-lg border-2 border-dashed border-[#E2E8F0] bg-gray-50 flex items-center justify-center overflow-hidden relative">
+                                <div className="space-y-6 md:col-span-2 mt-6 pt-12 border-t border-white/[0.03]">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Active Signature (Rubrica)</label>
+                                    <div className="flex flex-col sm:flex-row items-center gap-10 bg-white/[0.01] p-10 rounded-[32px] border border-white/[0.03]">
+                                        <div className="h-28 w-56 rounded-[24px] border border-white/[0.05] bg-black/40 flex items-center justify-center overflow-hidden relative group shadow-2xl">
                                             {signaturePreview ? (
-                                                <img src={signaturePreview} alt="Assinatura" className="w-full h-full object-contain p-2" />
+                                                <img src={signaturePreview} alt="Assinatura" className="w-full h-full object-contain p-4 transition-all duration-700 grayscale hover:grayscale-0" />
                                             ) : (
-                                                <Camera className="h-6 w-6 text-[#8896A6]" />
+                                                <Camera className="h-6 w-6 text-gray-800" />
                                             )}
                                         </div>
-                                        <div>
-                                            <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#E2E8F0] rounded-lg text-sm font-medium text-[#1A2E4A] hover:bg-gray-50 transition-colors">
-                                                <UploadCloud className="h-4 w-4" />
-                                                Subir assinatura
+                                        <div className="space-y-4">
+                                            <label className="cursor-pointer inline-flex items-center gap-3 px-8 py-4 bg-white/[0.03] border border-white/[0.05] text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white/[0.08] hover:border-brand-primary/20 transition-all active:scale-95 group">
+                                                <UploadCloud className="h-4 w-4 text-brand-primary" />
+                                                Update Cipher
                                                 <input type="file" name="digital_signature" accept="image/*" className="hidden" onChange={(e) => handleImageChange(e, setSignaturePreview)} />
                                             </label>
-                                            <p className="text-xs text-[#8896A6] mt-2">Recomendado: PNG fundo transparente da sua rubrica.</p>
+                                            <p className="text-[10px] text-gray-700 font-bold uppercase tracking-widest">Digital Auth / PNG Transparente</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* TAB 4: PROFISSIONAL */}
-                        <div className={activeTab === 'professional' ? 'block' : 'hidden'}>
-                            <div className="mb-6">
-                                <h3 className="text-lg font-semibold text-[#0F1B2D]">Informações Profissionais</h3>
-                                <p className="text-sm text-[#8896A6]">Estes textos alimentam nossa Inteligência Artificial para gerar "Sobre Nós" bem convincentes.</p>
+                        {/* TAB 4: BIO IA */}
+                        <div className={`${activeTab === 'professional' ? 'block animate-in fade-in slide-in-from-bottom-4 duration-700' : 'hidden'}`}>
+                            <div className="mb-12">
+                                <span className="text-[10px] font-black text-brand-primary uppercase tracking-[0.3em] block mb-2">Neural Context</span>
+                                <h3 className="text-4xl font-black text-white tracking-tighter">Bio & Contexto IA</h3>
                             </div>
 
-                            <div className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Apresentação da Empresa/Profissional</label>
-                                    <textarea name="professional_description" defaultValue={profile?.professional_description} rows={4} placeholder="Conte um pouco sobre sua história, tempo de mercado, missão..." className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all resize-y"></textarea>
+                            <div className="space-y-10">
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">DNA da Empresa (Contexto Mestre)</label>
+                                    <textarea name="professional_description" defaultValue={profile?.professional_description} rows={6} className="w-full bg-white/[0.02] border border-white/[0.05] p-6 rounded-[32px] text-white focus:border-brand-primary/30 outline-none resize-none font-medium leading-relaxed custom-scrollbar" placeholder="Conte sobre sua experiência, especialidades e conquistas..."></textarea>
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Principais Serviços</label>
-                                    <textarea name="main_services" defaultValue={profile?.main_services} rows={3} placeholder="Liste o que você melhor faz (Ex: Desenvolvimento Web, Design de Interface, Consultoria de Vendas)" className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all resize-y"></textarea>
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Core Service Ecosystem</label>
+                                    <textarea name="main_services" defaultValue={profile?.main_services} rows={3} className="w-full bg-white/[0.02] border border-white/[0.05] p-6 rounded-[32px] text-white focus:border-brand-primary/30 outline-none resize-none font-medium leading-relaxed" placeholder="Ex: Gestão de Tráfego, Branding, Design 3D..."></textarea>
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Diferenciais Competitivos</label>
-                                    <textarea name="professional_differentials" defaultValue={profile?.professional_differentials} rows={3} placeholder="O que destaca você ou sua empresa da concorrência?" className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all resize-y"></textarea>
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-[#1A2E4A]">Links de Portfólio / Casos de Sucesso</label>
-                                    <textarea name="portfolio_links" defaultValue={profile?.portfolio_links} rows={3} placeholder="URLs de portfólio, Behance, GitHub, links de sites feitos, etc." className="w-full p-3 rounded-lg border border-[#E2E8F0] focus:ring-2 focus:ring-[#C9A84C]/50 focus:border-[#C9A84C] outline-none transition-all resize-y"></textarea>
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-700 ml-1">Unique Value Propositions</label>
+                                    <textarea name="professional_differentials" defaultValue={profile?.professional_differentials} rows={4} className="w-full bg-white/[0.02] border border-white/[0.05] p-6 rounded-[32px] text-white focus:border-brand-primary/30 outline-none resize-none font-medium leading-relaxed" placeholder="Pelo que você quer ser reconhecido? Qual seu maior trunfo?"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -284,32 +293,43 @@ export function ProfileSettings({ profile }: { profile: ProfileData }) {
                 </div>
 
                 {/* Footer fixed */}
-                <div className="p-6 border-t border-[#E2E8F0] bg-gray-50 flex items-center justify-between">
-                    <div className="text-sm">
+                <div className="p-12 border-t border-white/[0.03] bg-black/40 backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-8 sticky bottom-0 z-20">
+                    <div className="flex-1">
                         {saveStatus === 'success' && (
-                            <span className="flex items-center text-[#2ECC71] font-medium">
-                                <Check className="h-4 w-4 mr-2" />
-                                Configurações salvas com sucesso!
-                            </span>
+                            <div className="flex items-center py-3 px-6 rounded-2xl bg-brand-primary/5 border border-brand-primary/10 text-brand-primary font-black uppercase tracking-[0.2em] text-[10px] animate-in slide-in-from-left-4 duration-500 w-fit">
+                                <Check className="w-3.5 h-3.5 mr-3 shadow-glow" />
+                                Neural profile synchronized successfully
+                            </div>
                         )}
                         {saveStatus === 'error' && (
-                            <span className="text-[#E74C3C] font-medium text-xs">
-                                Erro: {errorMessage}
-                            </span>
+                            <div className="flex items-center py-3 px-6 rounded-2xl bg-red-500/5 border border-red-500/10 text-red-500 font-black uppercase tracking-[0.2em] text-[10px] animate-in slide-in-from-left-4 duration-500 w-fit">
+                                <div className="w-2 h-2 rounded-full bg-red-500 mr-3 animate-pulse" />
+                                Error: {errorMessage}
+                            </div>
+                        )}
+                        {saveStatus === 'idle' && !isPending && (
+                            <div className="text-[10px] text-gray-700 font-black uppercase tracking-[0.3em] flex items-center gap-3">
+                                <div className="w-1 h-1 rounded-full bg-gray-800" />
+                                Ready for synchronization
+                            </div>
                         )}
                     </div>
+                    
                     <button
                         type="submit"
                         disabled={isPending}
-                        className="bg-gradient-to-r from-[#C9A84C] to-[#B3933E] hover:from-[#B3933E] hover:to-[#9E8033] text-white px-8 py-3 rounded-lg font-medium transition-all shadow-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="w-full sm:w-auto bg-brand-primary hover:brightness-110 text-black px-16 py-6 rounded-[24px] text-[11px] font-black uppercase tracking-[0.3em] transition-all shadow-[0_0_40px_rgba(13,242,89,0.25)] flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed group active:scale-95"
                     >
                         {isPending ? (
                             <>
                                 <Loader2 className="h-5 w-5 animate-spin" />
-                                Salvando...
+                                Synchronizing...
                             </>
                         ) : (
-                            'Salvar Configurações'
+                            <>
+                                Commit Changes
+                                <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                            </>
                         )}
                     </button>
                 </div>

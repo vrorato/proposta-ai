@@ -3,24 +3,34 @@ import { Button } from '@/components/ui/button'
 
 export function FinalCTA() {
     return (
-        <section className="py-24 bg-[#0F1B2D] relative overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#1A2E4A] via-[#0F1B2D] to-[#0F1B2D]"></div>
+        <section className="py-32 bg-[#0a0a0c] relative overflow-hidden">
+            {/* Background Glow */}
+            <div className="absolute inset-0 bg-gradient-to-b from-brand-primary/5 to-transparent"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-brand-primary/10 rounded-full blur-[120px]"></div>
 
-            <div className="container relative mx-auto px-6 text-center z-10">
-                <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-                    Pronto para transformar suas propostas?
+            <div className="container relative mx-auto px-6 text-center z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-8 tracking-tighter leading-tight">
+                    DOMINE O MERCADO COM <br />
+                    <span className="text-brand-primary">PROPOSTAS IRRESISTÍVEIS</span>
                 </h2>
-                <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-                    Junte-se a profissionais que já estão fechando mais negócios com propostas geradas por IA.
+                <p className="text-xl md:text-2xl text-gray-500 mb-14 max-w-3xl mx-auto font-medium">
+                    Junte-se aos consultores e agências de elite que já estão escalando suas vendas com a precisão da inteligência artificial.
                 </p>
 
                 <div className="flex flex-col items-center">
-                    <Button asChild size="lg" className="bg-[#C9A84C] hover:bg-[#b09341] text-[#0F1B2D] font-bold px-10 h-16 rounded-full text-lg shadow-[0_0_40px_rgba(201,168,76,0.3)] hover:shadow-[0_0_60px_rgba(201,168,76,0.4)] transition-all">
-                        <Link href="/cadastro">Começar Agora — É Grátis</Link>
+                    <Button asChild size="lg" className="bg-brand-primary hover:brightness-110 text-black font-black px-16 h-20 rounded-2xl text-base uppercase tracking-widest shadow-[0_0_50px_rgba(13,242,89,0.3)] hover:scale-105 transition-all active:scale-95">
+                        <Link href="/cadastro">Garantir Meu Acesso Gratuito</Link>
                     </Button>
-                    <p className="mt-6 text-sm text-gray-500">
-                        Sem cartão de crédito. Crie sua primeira proposta em minutos.
-                    </p>
+                    <div className="mt-8 flex items-center gap-6 text-sm font-bold text-gray-600 uppercase tracking-widest">
+                        <span className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
+                            Sem Cartão de Crédito
+                        </span>
+                        <span className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
+                            Setup em 2 Minutos
+                        </span>
+                    </div>
                 </div>
             </div>
         </section>
